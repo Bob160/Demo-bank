@@ -21,4 +21,5 @@ public class UserRequestDto {
     //private BigDecimal accountBalance;
     private String phoneNumber;
     private String alternativePhoneNumber;
+    private String status;
 }

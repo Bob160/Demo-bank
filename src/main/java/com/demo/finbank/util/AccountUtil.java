@@ -4,6 +4,9 @@ import java.time.Year;
 
 public class AccountUtil {
 
+    public static final String ACCOUNT_EXIST_CODE = "400";
+    public static final String ACCOUNT_EXIST_MESSAGE = "User already has an account";
+
 
 
     public static String generateAccountNumber() {
@@ -15,7 +18,7 @@ public class AccountUtil {
         int minSix = 100000;
         int maxSix = 999999;
 
-        //Generate random nuber between minSix and maxSix
+        //Generate random number between minSix and maxSix
 
         int randNumber = (int) Math.floor(Math.random() * (maxSix - minSix + 1) + minSix);
 
