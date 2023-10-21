@@ -4,6 +4,7 @@ import com.demo.finbank.dto.AccountInfo;
 import com.demo.finbank.dto.requests.EnquiryRequestDto;
 import com.demo.finbank.dto.requests.UserRequestDto;
 import com.demo.finbank.dto.responses.BankResponse;
+import com.demo.finbank.dto.responses.CheckNameResponse;
 import com.demo.finbank.model.User;
 import com.demo.finbank.repositories.UserRepository;
 import com.demo.finbank.services.UserService;
@@ -81,27 +82,46 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String checkName(String accountNumber) {
-
+    public CheckNameResponse checkName(String accountNumber) {
         boolean isAccountExist = userRepository.existsByAccountNumber(accountNumber);
 
         if (!isAccountExist) {
-            return AccountUtil.ACCOUNT_DOES_NOT_EXIST_MESSAGE;
+          return  CheckNameResponse.builder()
+                  .accountName(AccountUtil.ACCOUNT_DOES_NOT_EXIST_MESSAGE)
+                  .status("Account does not exist")
+                    .build();
         } else {
             User foundUser = userRepository.findByAccountNumber(accountNumber);
-//            BankResponse.builder()
-//                    .accountInfo(
-//                            AccountInfo.builder()
-//                                    .accountNumber(enquiryRequestDto.getAccountNumber())
-//                                    .accountBalance(String.valueOf(foundUser.getAccountBalance()))
-//                                    .accountName(foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname())
-//                                    .build()
-//                    )
-//                    .responseMessage("Account Found!")
-//                    .responseCode("200")
-//                    .build();
-
-            return foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname();
+            return CheckNameResponse.builder()
+                    .accountName(foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname())
+                    .createdAt(foundUser.getCreatedAt())
+                    .status(foundUser.getStatus())
+                    .build();
         }
     }
+
+//    @Override
+//    public String checkName(String accountNumber) {
+//
+//        boolean isAccountExist = userRepository.existsByAccountNumber(accountNumber);
+//
+//        if (!isAccountExist) {
+//            return AccountUtil.ACCOUNT_DOES_NOT_EXIST_MESSAGE;
+//        } else {
+//            User foundUser = userRepository.findByAccountNumber(accountNumber);
+////            BankResponse.builder()
+////                    .accountInfo(
+////                            AccountInfo.builder()
+////                                    .accountNumber(enquiryRequestDto.getAccountNumber())
+////                                    .accountBalance(String.valueOf(foundUser.getAccountBalance()))
+////                                    .accountName(foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname())
+////                                    .build()
+////                    )
+////                    .responseMessage("Account Found!")
+////                    .responseCode("200")
+////                    .build();
+//
+//            return foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname();
+//        }
+//    }
 }
