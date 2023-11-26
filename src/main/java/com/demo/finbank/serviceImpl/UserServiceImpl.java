@@ -1,12 +1,14 @@
 package com.demo.finbank.serviceImpl;
 
 import com.demo.finbank.dto.AccountInfo;
+import com.demo.finbank.dto.EmailDetails;
 import com.demo.finbank.dto.requests.EnquiryRequestDto;
 import com.demo.finbank.dto.requests.UserRequestDto;
 import com.demo.finbank.dto.responses.BankResponse;
 import com.demo.finbank.dto.responses.CheckNameResponse;
 import com.demo.finbank.model.User;
 import com.demo.finbank.repositories.UserRepository;
+import com.demo.finbank.services.EmailService;
 import com.demo.finbank.services.UserService;
 import com.demo.finbank.util.AccountUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,6 +21,10 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     UserRepository userRepository;
+//    @Autowired
+//    EmailService emailService;
+    @Autowired
+    EmailServiceImpl emailService;
     @Override
     public BankResponse createAccount(UserRequestDto userRequestDto) {
 
@@ -44,6 +50,15 @@ public class UserServiceImpl implements UserService {
                     .status("ACTIVE")
                .build();
             userRepository.save(newUser);
+            EmailDetails emailDetails = EmailDetails.builder()
+                    .recipient(newUser.getEmail())
+                    .subject("ACCOUNT CREATION")
+                    .messageBody("Congratulations, \n" +
+                            "Your account has been created successfully. Your account details are as follows: \n" +
+                    "Account Name: " + newUser.getFirstname() + " " + newUser.getLastname() + " " + "and your account number is: " + newUser.getAccountNumber())
+
+                    .build();
+            emailService.sendEmailAlert(emailDetails);
             return BankResponse.builder()
                     .responseMessage("Account created successfully!")
                     .responseCode("200")
