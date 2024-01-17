@@ -11,10 +11,7 @@ public class AccountUtil {
     public static final String ACCOUNT_DOES_NOT_EXIST_MESSAGE = "Account does not exist";
 
     public static String generateAccountNumber() {
-        /** 2023 + randomSixDigits
-         *
-         */
-
+//        2023 + randomSixDigits
         Year currentYear = Year.now();
         int minSix = 100000;
         int maxSix = 999999;

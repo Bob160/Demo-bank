@@ -1,5 +1,6 @@
 package com.demo.finbank.controllers;
 
+import com.demo.finbank.dto.requests.CreditDebitRequest;
 import com.demo.finbank.dto.requests.UserRequestDto;
 import com.demo.finbank.dto.responses.BankResponse;
 import com.demo.finbank.dto.responses.CheckNameResponse;
@@ -9,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -82,5 +85,24 @@ public class UserController {
             return new ResponseEntity<>(bankResponse, HttpStatus.OK);
         }
 
+    }
+
+    @PostMapping("/credit-account")
+    public ResponseEntity<BankResponse> creditAccount(@RequestBody @Valid CreditDebitRequest creditRequest) {
+        BankResponse bankResponse = userServiceImpl.creditAccount(creditRequest);
+
+        if (bankResponse.getResponseMessage().equals ("Account does not exist")) {
+//            BankResponse bankResponse = BankResponse.builder()
+//                    .responseCode("400")
+//                    .responseMessage("Account does not exist")
+//                    .build();
+            return new ResponseEntity<>(bankResponse, HttpStatus.NOT_FOUND);
+        } else {
+//            BankResponse bankResponse = BankResponse.builder()
+//                    .responseCode("200")
+//                    .responseMessage("Account exist")
+//                    .build();
+            return new ResponseEntity<>(bankResponse, HttpStatus.OK);
+        }
     }
 }

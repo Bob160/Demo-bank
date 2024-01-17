@@ -1,5 +1,6 @@
 package com.demo.finbank.services;
 
+import com.demo.finbank.dto.requests.CreditDebitRequest;
 import com.demo.finbank.dto.requests.EnquiryRequestDto;
 import com.demo.finbank.dto.requests.UserRequestDto;
 import com.demo.finbank.dto.responses.BalanceResponse;
@@ -13,6 +14,8 @@ public interface UserService {
 
     //String checkName(String accountNumber);
     CheckNameResponse checkName(String accountNumber);
+
+    BankResponse creditAccount(CreditDebitRequest creditRequest);
 
 
 }

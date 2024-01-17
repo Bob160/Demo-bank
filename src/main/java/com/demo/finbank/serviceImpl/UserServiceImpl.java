@@ -2,6 +2,7 @@ package com.demo.finbank.serviceImpl;
 
 import com.demo.finbank.dto.AccountInfo;
 import com.demo.finbank.dto.EmailDetails;
+import com.demo.finbank.dto.requests.CreditDebitRequest;
 import com.demo.finbank.dto.requests.EnquiryRequestDto;
 import com.demo.finbank.dto.requests.UserRequestDto;
 import com.demo.finbank.dto.responses.BankResponse;
@@ -23,8 +24,8 @@ public class UserServiceImpl implements UserService {
     UserRepository userRepository;
 //    @Autowired
 //    EmailService emailService;
-    @Autowired
-    EmailServiceImpl emailService;
+//    @Autowired
+//    EmailServiceImpl emailService;
     @Override
     public BankResponse createAccount(UserRequestDto userRequestDto) {
 
@@ -58,7 +59,7 @@ public class UserServiceImpl implements UserService {
                     "Account Name: " + newUser.getFirstname() + " " + newUser.getLastname() + " " + "and your account number is: " + newUser.getAccountNumber())
 
                     .build();
-            emailService.sendEmailAlert(emailDetails);
+//            emailService.sendEmailAlert(emailDetails);
             return BankResponse.builder()
                     .responseMessage("Account created successfully!")
                     .responseCode("200")
@@ -111,6 +112,32 @@ public class UserServiceImpl implements UserService {
                     .accountName(foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname())
                     .createdAt(foundUser.getCreatedAt())
                     .status(foundUser.getStatus())
+                    .build();
+        }
+    }
+
+    @Override
+    public BankResponse creditAccount(CreditDebitRequest creditRequest) {
+        //Check if the account exist
+        boolean isAccountExist = userRepository.existsByAccountNumber(creditRequest.getAccountNumber());
+        if (!isAccountExist) {
+            return BankResponse.builder()
+                    .responseCode(AccountUtil.ACCOUNT_DOES_NOT_EXIST_CODE)
+                    .responseMessage(AccountUtil.ACCOUNT_DOES_NOT_EXIST_MESSAGE)
+                    .build();
+        } else {
+            User foundUser = userRepository.findByAccountNumber(creditRequest.getAccountNumber());
+            foundUser.setAccountBalance(foundUser.getAccountBalance().add(creditRequest.getAmount()));
+            userRepository.save(foundUser);
+
+            return BankResponse.builder()
+                    .responseCode("200")
+                    .responseMessage("Account credited successfully")
+                    .accountInfo(AccountInfo.builder()
+                            .accountName(foundUser.getFirstname() + " " + foundUser.getOtherName() + " " + foundUser.getLastname())
+                            .accountBalance(String.valueOf(foundUser.getAccountBalance()))
+                            .accountNumber(creditRequest.getAccountNumber())
+                            .build())
                     .build();
         }
     }
