@@ -1,7 +1,11 @@
 package com.demo.finbank.util;
 
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+
 import java.time.Year;
 
+@Configuration
 public class AccountUtil {
 
     public static final String ACCOUNT_EXIST_CODE = "400";

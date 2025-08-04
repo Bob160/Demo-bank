@@ -1,17 +1,15 @@
 package com.demo.finbank.repositories;
 
-import com.demo.finbank.model.User;
+import com.demo.finbank.model.Users;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import java.util.Optional;
-
 @Repository
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<Users, Long> {
 
     boolean existsByEmail (String email);
 
-    User findByAccountNumber(String accountNumber);
+    Users findByAccountNumber(String accountNumber);
 
     boolean existsByAccountNumber(String accountNumber);
    // Optional<User> findByAccountBalance(String accountBalance);
