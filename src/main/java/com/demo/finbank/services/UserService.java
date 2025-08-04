@@ -12,8 +12,8 @@ public interface UserService {
 
     BankResponse checkBalance(String accountNumber);
 
-    //String checkName(String accountNumber);
-    CheckNameResponse checkName(String accountNumber);
+    String checkName(String accountNumber);
+    //CheckNameResponse checkName(String accountNumber);
 
     BankResponse creditAccount(CreditDebitRequest creditRequest);
 
